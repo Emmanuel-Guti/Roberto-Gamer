@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¿Qué Superhéroe Eres?</title>
+    <link rel="stylesheet" href="css/style.css">
+  </head>
+  <body>
+    <div id="app">
+      <h1>¡Descubre qué superhéroe eres!</h1>
+
+      <div v-if="!nombre">
+        <label for="nombre">Escribe tu nombre completo:</label>
+        <input id="nombre" type="text" v-model="nombre" placeholder="Tu nombre aquí" maxlength="100" />
+        <button @click="comenzarTest">Comenzar Test</button>
+      </div>
+
+      <div v-else-if="!finalizado">
+        <p>Hola, {{ nombre }}! Responde las siguientes preguntas para descubrir qué superhéroe eres:</p>
+
+        <div v-for="(pregunta, index) in preguntas" :key="index" v-show="index === preguntaActual">
+          <p>{{ pregunta.texto }}</p>
+          <ul>
+            <li v-for="(respuesta, i) in pregunta.respuestas" :key="i">
+              <input type="radio" :name="'pregunta' + index" :value="respuesta.puntos" v-model="respuestas[index]" />
+              {{ respuesta.texto }}
+            </li>
+          </ul>
+          <button v-if="index < preguntas.length - 1" @click="siguientePregunta">Siguiente</button>
+          <button v-else @click="calcularResultado">Finalizar</button>
+        </div>
+      </div>
+
+      <div v-if="finalizado">
+        <h2>Resultado del Test para {{ nombre }}</h2>
+        <p>¡Tu superhéroe es: {{ superheroe }}!</p>
+        <p>{{ descripcion }}</p>
+        <button @click="reiniciarTest">Reiniciar Test</button>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <script src="js/app.js"></script>
+  </body>
+</html>
